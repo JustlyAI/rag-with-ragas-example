@@ -1,0 +1,16 @@
+tiktoken==0.6.0
+PyPDF2==3.0.1
+openai==1.10.0
+scikit-learn==1.5.0
+numpy==1.26.4
+termcolor
+ragas==0.1.2
+langchain
+langchain-community
+langchain-core
+langchain-openai
+datasets
+python-dotenv
+seaborn
+matplotlib
+python-dotenv
