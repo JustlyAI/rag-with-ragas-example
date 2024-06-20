@@ -1,6 +1,14 @@
 # Generic RAG with RAGAS Evaluation
 
-Inspired by:
+Quick Check:
+
+`python -m app.chat`
+
+`python -m app.eval`
+
+`streamlit run app/streamlit.py`
+
+With gratitude, this project has been inspired and support by the work of brilliant and generous indivuals:
 
 [Modular Rag and chat implementation from URLs, PDFs and txt files. | Patreon](https://www.patreon.com/posts/modular-rag-and-106461497)
 

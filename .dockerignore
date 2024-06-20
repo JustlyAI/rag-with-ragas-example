@@ -1,0 +1,15 @@
+.env
+chat.py
+# output/*.json
+# output/*.csv
+output/*.txt
+examples/*
+
+*__pycache__
+*.DS_Store
+*.json
+*.csv
+*.pyc
+*.pyo
+*.pyd
+*.venv
