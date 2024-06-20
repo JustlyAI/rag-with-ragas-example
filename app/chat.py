@@ -1,7 +1,8 @@
 import asyncio
 import os
 from termcolor import colored
-from rag import Rag
+
+from app.rag import Rag
 
 
 async def chat_loop():
@@ -11,6 +12,13 @@ async def chat_loop():
 
     # Create an instance of the Rag class
     rag = Rag()
+
+    # Ask user y/n if you would like to clear existing output
+    if (
+        input(colored("Would you like to clear existing output? (y/n): ", "blue"))
+        == "y"
+    ):
+        rag.clear_output_folder()
 
     # Automatically process files from the data folder
     print(colored("Processing files from the data folder", "magenta"))
@@ -25,11 +33,18 @@ async def chat_loop():
         chunks = rag.process_text(text)
         all_chunks.extend(chunks)
 
-    rag.save_chunks_to_file(all_chunks, filename="chunks.json")
-    print(colored("Chunks saved to chunks.json", "green"))
+    number_of_files = len(
+        [file for file in os.listdir(data_folder) if file != "__init__.py"]
+    )
+    print(colored(f"Number of files processed: {number_of_files}.", "yellow"))
+
+    rag.save_chunks_to_file(all_chunks, filename="app/output/data_chunks.json")
+    # Exclude __init__.py and count the number of files in the data folder
+    print(colored("Chunks saved to data_chunks.json", "green"))
+    print(colored(f"Number of chunks processed: {len(all_chunks)}.", "yellow"))
     new_embedded_chunks = await rag.embed_text_chunks(all_chunks)
     embedded_chunks.extend(new_embedded_chunks)
-    rag.save_chunks_to_file(embedded_chunks, filename="embeddings.json")
+    rag.save_chunks_to_file(embedded_chunks, filename="app/output/embeddings.json")
     print(colored("Chunks and embeddings saved to embeddings.json", "green"))
 
     while True:
@@ -59,11 +74,11 @@ async def chat_loop():
                 )
 
                 rag.save_top_chunks_text_to_file(
-                    top_chunks, filename="top_chunks_text.json"
+                    top_chunks, filename="app/output/top_chunks.json"
                 )
                 print(
                     colored(
-                        f"Top {top_k} chunks' text saved to top_chunks_text.json",
+                        f"Top {top_k} chunks' text saved to top_chunks.json",
                         "green",
                     )
                 )
@@ -93,11 +108,15 @@ async def chat_loop():
                     text = await rag.fetch_text_from_url(url.strip())
                     chunks = rag.process_text(text)
                     all_chunks.extend(chunks)
-                rag.save_chunks_to_file(all_chunks, filename="chunks.json")
-                print(colored("Chunks saved to chunks.json", "green"))
+                rag.save_chunks_to_file(
+                    all_chunks, filename="app/output/data_chunks.json"
+                )
+                print(colored("Chunks saved to data_chunks.json", "green"))
                 new_embedded_chunks = await rag.embed_text_chunks(all_chunks)
                 embedded_chunks.extend(new_embedded_chunks)
-                rag.save_chunks_to_file(embedded_chunks, filename="embeddings.json")
+                rag.save_chunks_to_file(
+                    embedded_chunks, filename="app/output/embeddings.json"
+                )
                 print(
                     colored("Chunks and embeddings saved to embeddings.json", "green")
                 )

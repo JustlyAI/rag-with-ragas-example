@@ -45,8 +45,8 @@ async def main():
     )
     # Convert the testset to a pandas DataFrame and save it to a CSV file
     testset_df = testset.to_pandas()
-    testset_df.to_csv("testset.csv", index=False)
-    print(colored("Test set has been exported to testset.csv.", "blue"))
+    testset_df.to_csv("app/output/testset.csv", index=False)
+    print(colored("Test set has been exported to app/output/testset.csv.", "blue"))
 
     questions = testset.to_pandas()["question"].to_list()
     ground_truth = testset.to_pandas()["ground_truth"].to_list()
@@ -91,9 +91,12 @@ async def main():
 
     # Export the dataset as a CSV file for inspection
     dataset_df = dataset.to_pandas()
-    dataset_df.to_csv("generated_dataset.csv", index=False)
+    dataset_df.to_csv("app/output/generated_dataset.csv", index=False)
     print(
-        colored("Generated dataset has been exported to generated_dataset.csv.", "blue")
+        colored(
+            "Generated dataset has been exported to app/output/generated_dataset.csv.",
+            "blue",
+        )
     )
 
     result = evaluate(
@@ -108,10 +111,11 @@ async def main():
     )
 
     result_df = result.to_pandas()
-    result_df.to_csv("evaluation_results.csv", index=False)
+    result_df.to_csv("app/output/evaluation_results.csv", index=False)
     print(
         colored(
-            "Evaluation results have been exported to evaluation_results.csv.", "blue"
+            "Evaluation results have been exported to app/output/evaluation_results.csv.",
+            "blue",
         )
     )
 
