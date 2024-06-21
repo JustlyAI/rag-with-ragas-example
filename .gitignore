@@ -1,7 +1,9 @@
+# TODO
+
 *__pycache__
 *.DS_Store
 .env
-examples/*
+examples/
 *.json
 *.csv
 *.pyc

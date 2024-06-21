@@ -1,0 +1,24 @@
+# Don't trust this yet!--I'm still working on it.
+
+version: "3.10"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - HOST=0.0.0.0
+      - LISTEN_PORT=8080
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - .:/app
+    working_dir: /app # Ensure the working directory is set
+    entrypoint:
+      [
+        "bash",
+        "-c",
+        "ls -l app && streamlit run app/streamlit.py --server.port=8080",
+      ]

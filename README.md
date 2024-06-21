@@ -8,6 +8,29 @@ Quick Check:
 
 `streamlit run app/streamlit.py`
 
+<!-- Build a local docker image:
+
+docker build -t <image_name> .
+
+Run the image
+
+docker run -p 8080:8080 <image_name> -->
+
+<!-- However, running Docker on an Apple M2 (ARM64 architecture) can indeed cause compatibility issues when deploying to cloud environments like Google Cloud Run, which typically use AMD64 architecture.
+
+docker buildx create --use
+docker buildx inspect --bootstrap -->
+
+1. **Build the Docker Image Locally:**
+
+`docker buildx build --platform linux/amd64 -t rag-ragas-test . --load`
+
+2. **Verify the Image Exists Locally:**
+   `docker images`
+
+3. **Run the Docker Container:**
+   `docker run -p 8080:8080 rag-ragas-test`
+
 With gratitude, this project has been inspired and support by the work of brilliant and generous indivuals:
 
 [Modular Rag and chat implementation from URLs, PDFs and txt files. | Patreon](https://www.patreon.com/posts/modular-rag-and-106461497)
