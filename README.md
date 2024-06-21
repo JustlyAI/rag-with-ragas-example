@@ -1,8 +1,32 @@
-# Generic RAG with RAGAS Evaluation
+# Simple RAG with RAGAS Evaluation
+
+#### Build and evaluate your own custom RAG system.
 
 ## Quick Start
 
 To quickly check the functionality, run the following commands:
+
+## Setting Up Environment Variables
+
+Before running the application, ensure you have set the `OPENAI_API_KEY` in a `.env` file in the root directory of your project. This key is necessary for accessing OpenAI's API. To obtain key, visit [Overview - OpenAI API](https://platform.openai.com/docs/overview).
+
+1. **Create a `.env` file in the root directory:**
+
+   ```sh
+   touch .env
+   ```
+
+2. **Add your OpenAI API key to the `.env` file:**
+
+   ```sh
+   echo "OPENAI_API_KEY=your_openai_api_key_here" >> .env
+   ```
+
+Replace `your_openai_api_key_here` with your actual OpenAI API key.
+
+The current implementation defaults to gpt-4-turbo for the LLM model and OpenAI'stext-embedding-3-large for the embeddings model. The models used are among the most impoortant factors to consider in building and measuring RAG systems.
+
+3. **Run these 3 commands to check the application components:**(May not work on all systems, in any case see Docker Instructions)
 
 ```sh
 python -m app.chat
@@ -10,11 +34,21 @@ python -m app.eval
 streamlit run app/streamlit.py
 ```
 
+A deployed simple RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
+
 ## Docker Instructions
 
 ### Build and Run Docker Image
 
 1. **Build the Docker Image Locally:**
+
+   For Windows:
+
+   ```sh
+   docker build -t rag-ragas-test .
+   ```
+
+   For Mac Silicon (M1, M2, M3, M4):
 
    ```sh
    docker buildx build --platform linux/amd64 -t rag-ragas-test . --load
@@ -29,12 +63,12 @@ streamlit run app/streamlit.py
 3. **Run the Docker Container:**
 
    ```sh
-   docker run -p 8080:8080 rag-ragas-test
+   \
    ```
 
 ## Acknowledgements
 
-This project has been inspired and supported by the work of brilliant and generous individuals:
+This project has been inspired and built upon the work of brilliant and generous individuals, namely:
 
 - [Modular Rag and chat implementation from URLs, PDFs and txt files. | Patreon](https://www.patreon.com/posts/modular-rag-and-106461497)
 - [Coding-Crashkurse/RAG-Evaluation-with-Ragas](https://github.com/Coding-Crashkurse/RAG-Evaluation-with-Ragas)
@@ -43,8 +77,8 @@ This project has been inspired and supported by the work of brilliant and genero
 
 This repository demonstrates a Retrieval-Augmented Generation (RAG) pipeline using the `Rag` class and evaluates its performance using the `Ragas` framework. The main components are:
 
-- `chat_loop.py`: Processes files, embeds text, and handles user queries.
-- `ragas_eval.py`: Evaluates the RAG pipeline using `Ragas`.
+- `chat.py`: Processes files, embeds text, and handles user queries.
+- `eval.py`: Evaluates the RAG pipeline using `Ragas`.
 
 ## Prerequisites
 
@@ -54,9 +88,9 @@ Ensure you have the required packages installed:
 pip install -r requirements.txt
 ```
 
-## Running the Chat Loop
+## Running the Chat
 
-The `chat_loop.py` script processes text and PDF files, embeds the text, and allows user interaction for querying the embedded data.
+The `chat.py` script processes text and PDF files, embeds the text, and allows user interaction for querying the embedded data.
 
 ### Steps:
 
@@ -64,14 +98,14 @@ The `chat_loop.py` script processes text and PDF files, embeds the text, and all
 2. Run the script:
 
    ```sh
-   python chat_loop.py
+   python -m app.chat.py
    ```
 
 3. Follow the prompts to add URLs, search, or exit.
 
 ## Evaluating the RAG Pipeline
 
-The `ragas_eval.py` script processes files, generates a test set, and evaluates the RAG pipeline using `Ragas`.
+The `eval.py` script processes files, generates a test set, and evaluates the RAG pipeline using `Ragas`.
 
 ### Steps:
 
@@ -79,30 +113,45 @@ The `ragas_eval.py` script processes files, generates a test set, and evaluates 
 2. Run the script:
 
    ```sh
-   python ragas_eval.py
+   python -m app.eval.py
    ```
 
 3. The script will generate and save evaluation results in `evaluation_results.csv`.
 
 ## Key Files
 
-- `chat_loop.py`: Main chat loop for processing and querying data.
-- `ragas_eval.py`: Script for evaluating the RAG pipeline.
 - `rag.py`: Contains the `Rag` class with methods for processing and embedding text.
+
+The rag file is the most important file in this project. It contains the `Rag` class with methods for processing and embedding text and is used by the chat, eval, and Streamlit files (and will be used by the FastAPI implementation to come). The functions in this Rag were primarily authored by the marvelous echohive [echohive | Building AI powered apps | Patreon](https://www.patreon.com/echohive42/posts). Echo also conceived the simple chat loop for quick RAG testing.
+
+- `chat.py`: Main chat loop for processing and querying data.
+- `eval.py`: Script for evaluating the RAG pipeline.
+
+The RAGAS set up was inspired by by
+Coding-Crashkurse [Coding Crashkurse - YouTube](https://www.youtube.com/@codingcrashkurse6429).
+
+- `streamlit.py`: Streamlit app for interacting with the RAG pipeline and RAGAS evaluation.
+
 - `requirements.txt`: Lists the required Python packages.
 
 ## Example Usage
 
-### Running the Chat Loop
+### Running the Chat
 
 ```sh
-python chat_loop.py
+python -m app.chat.py
 ```
 
 ### Running the Evaluation
 
 ```sh
-python ragas_eval.py
+python -m app.eval.py
+```
+
+### Running Streamlit
+
+```sh
+streamlit run app/streamlit.py
 ```
 
 ## Additional Information
