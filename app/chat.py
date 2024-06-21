@@ -8,7 +8,7 @@ from app.rag import Rag
 async def chat_loop():
     all_chunks = []
     embedded_chunks = []
-    data_folder = "data"
+    data_folder = "app/data"
 
     # Create an instance of the Rag class
     rag = Rag()

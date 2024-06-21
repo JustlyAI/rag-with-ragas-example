@@ -1,9 +1,7 @@
 .env
 chat.py
-# output/*.json
-# output/*.csv
 output/*.txt
-examples/*
+examples/
 
 *__pycache__
 *.DS_Store
