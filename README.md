@@ -1,49 +1,49 @@
 # Generic RAG with RAGAS Evaluation
 
-Quick Check:
+## Quick Start
 
-`python -m app.chat`
+To quickly check the functionality, run the following commands:
 
-`python -m app.eval`
+```sh
+python -m app.chat
+python -m app.eval
+streamlit run app/streamlit.py
+```
 
-`streamlit run app/streamlit.py`
+## Docker Instructions
 
-<!-- Build a local docker image:
-
-docker build -t <image_name> .
-
-Run the image
-
-docker run -p 8080:8080 <image_name> -->
-
-<!-- However, running Docker on an Apple M2 (ARM64 architecture) can indeed cause compatibility issues when deploying to cloud environments like Google Cloud Run, which typically use AMD64 architecture.
-
-docker buildx create --use
-docker buildx inspect --bootstrap -->
+### Build and Run Docker Image
 
 1. **Build the Docker Image Locally:**
 
-`docker buildx build --platform linux/amd64 -t rag-ragas-test . --load`
+   ```sh
+   docker buildx build --platform linux/amd64 -t rag-ragas-test . --load
+   ```
 
 2. **Verify the Image Exists Locally:**
-   `docker images`
+
+   ```sh
+   docker images
+   ```
 
 3. **Run the Docker Container:**
-   `docker run -p 8080:8080 rag-ragas-test`
 
-With gratitude, this project has been inspired and support by the work of brilliant and generous indivuals:
+   ```sh
+   docker run -p 8080:8080 rag-ragas-test
+   ```
 
-[Modular Rag and chat implementation from URLs, PDFs and txt files. | Patreon](https://www.patreon.com/posts/modular-rag-and-106461497)
+## Acknowledgements
 
--and-
+This project has been inspired and supported by the work of brilliant and generous individuals:
 
-[Coding-Crashkurse/RAG-Evaluation-with-Ragas](https://github.com/Coding-Crashkurse/RAG-Evaluation-with-Ragas)
+- [Modular Rag and chat implementation from URLs, PDFs and txt files. | Patreon](https://www.patreon.com/posts/modular-rag-and-106461497)
+- [Coding-Crashkurse/RAG-Evaluation-with-Ragas](https://github.com/Coding-Crashkurse/RAG-Evaluation-with-Ragas)
 
 ## Overview
 
 This repository demonstrates a Retrieval-Augmented Generation (RAG) pipeline using the `Rag` class and evaluates its performance using the `Ragas` framework. The main components are:
 
-- `chat_loop.py`: A chat loop that processes files, embeds text, and handles user queries.
+- `chat_loop.py`: Processes files, embeds text, and handles user queries.
 - `ragas_eval.py`: Evaluates the RAG pipeline using `Ragas`.
 
 ## Prerequisites
@@ -63,9 +63,9 @@ The `chat_loop.py` script processes text and PDF files, embeds the text, and all
 1. Place your text and PDF files in the `data` folder.
 2. Run the script:
 
-```sh
-python chat_loop.py
-```
+   ```sh
+   python chat_loop.py
+   ```
 
 3. Follow the prompts to add URLs, search, or exit.
 
@@ -78,9 +78,9 @@ The `ragas_eval.py` script processes files, generates a test set, and evaluates 
 1. Ensure your data files are in the `data` folder.
 2. Run the script:
 
-```sh
-python ragas_eval.py
-```
+   ```sh
+   python ragas_eval.py
+   ```
 
 3. The script will generate and save evaluation results in `evaluation_results.csv`.
 
