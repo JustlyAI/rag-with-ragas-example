@@ -187,7 +187,7 @@ class Rag:
     async def call_gpt4(self, messages):
         """Calls the GPT-4 model to generate responses based on the provided messages."""
         response = await self.client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4-turbo",
             messages=messages,
             stream=False,
         )
@@ -198,7 +198,7 @@ class Rag:
     async def call_gpt4_with_streaming(self, messages):
         """Calls the GPT-4 model with streaming enabled to generate responses based on the provided messages."""
         response = await self.client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4-turbo",
             messages=messages,
             stream=True,
         )
@@ -214,7 +214,7 @@ class Rag:
     async def call_gpt4_with_streaming_for_streamlit(self, messages):
         """Calls the GPT-4 model with streaming enabled to generate responses based on the provided messages."""
         response = await self.client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4-turbo",
             messages=messages,
             stream=True,
         )
@@ -235,7 +235,7 @@ class Rag:
             },
         )
         response = await self.client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4-turbo",
             messages=messages,
             response_format={"type": "json_object"},
             stream=False,

@@ -189,7 +189,13 @@ class RagWithRagasApp:
                     asyncio.run(
                         self.eval.run_evaluation()
                     )  # Use the initialized method
+
                 st.success("RAG evaluation completed!")
+
+                if os.path.exists("app/output/testset.csv"):
+                    st.subheader("Test Set")
+                    testset = pd.read_csv("app/output/testset.csv")
+                    st.dataframe(testset)
 
                 if os.path.exists("app/output/evaluation_results.csv"):
                     st.subheader("Evaluation Results")
@@ -230,12 +236,8 @@ class RagWithRagasApp:
                     plt.title("RAGAS Evaluation Heatmap", fontsize=16)
                     plt.xlabel("Metrics", fontsize=14)
                     plt.ylabel("Questions", fontsize=14)
-                    st.pyplot(plt)
-
-            if os.path.exists("app/output/testset.csv"):
-                st.subheader("Test Set")
-                testset = pd.read_csv("app/output/testset.csv")
-                st.dataframe(testset)
+                    st.pyplot(plt.gcf())  # Render the current figure
+                    plt.close()  # Close the figure to avoid overlap
 
     def render(self):
         if "openai_api_key" not in st.session_state:
