@@ -16,8 +16,8 @@ load_dotenv()
 
 class Rag:
     def __init__(self):
-        self.token_encoding_model = "gpt-4"
-        self.embedding_model = "text-embedding-3-large"
+        # self.token_encoding_model = "gpt-4"
+        # self.embedding_model = "text-embedding-3-large"
         self.client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "YOUR_API_KEY"))
 
     async def fetch_text_from_url(self, url):
@@ -43,30 +43,32 @@ class Rag:
                 text += page.extract_text()
             return text
 
-    def count_tokens(self, text):
+    def count_tokens(self, text, token_encoding_model="gpt-4"):
         """Counts the number of tokens in the given text using the specified token encoding model."""
-        enc = tiktoken.encoding_for_model(self.token_encoding_model)
+        enc = tiktoken.encoding_for_model(token_encoding_model)
         return len(enc.encode(text))
 
-    def process_text(self, text):
+    def process_text(
+        self, text, token_encoding_model="gpt-4", chunk_size=800, overlap=400
+    ):
         """Processes text into chunks suitable for embedding."""
-        enc = tiktoken.encoding_for_model(self.token_encoding_model)
+        enc = tiktoken.encoding_for_model(token_encoding_model)
         encoded = enc.encode(text)
         chunks = []
-        chunk_size = 800
-        overlap = 400
+        chunk_size = chunk_size
+        overlap = overlap
         for i in range(0, len(encoded), chunk_size - overlap):
             chunk = encoded[i : i + chunk_size]
             chunks.append(chunk)
         decoded_chunks = [enc.decode(chunk) for chunk in chunks]
         return decoded_chunks
 
-    async def embed_text_chunks(self, chunks):
+    async def embed_text_chunks(self, chunks, embedding_model="text-embedding-3-large"):
         """Embeds text chunks asynchronously."""
 
         async def embed_chunk(chunk):
             response = await self.client.embeddings.create(
-                input=chunk, model=self.embedding_model
+                input=chunk, model=embedding_model
             )
             return {"text": chunk, "embedding": response.data[0].embedding}
 
@@ -74,12 +76,14 @@ class Rag:
         embedded_chunks = await asyncio.gather(*tasks)
         return embedded_chunks
 
-    async def embed_text_chunks_for_eval(self, chunks):
+    async def embed_text_chunks_for_eval(
+        self, chunks, embedding_model="text-embedding-3-large"
+    ):
         """Embeds text chunks for evaluation purposes asynchronously."""
 
         async def embed_chunk_for_eval(chunk):
             response = await self.client.embeddings.create(
-                input=chunk, model=self.embedding_model
+                input=chunk, model=embedding_model
             )
             return Document(
                 page_content=chunk, metadata={"embedding": response.data[0].embedding}
@@ -161,11 +165,15 @@ class Rag:
                 )  # Construct the full file path
                 os.remove(file_path)  # Remove the file at the given path
 
-    async def embed_query(self, query, prequery="", postquery=""):
+    # Good place for prompt engineering of the query if deisred.
+    # For example, adding a prefix or postfix to the query to help with context.
+    async def embed_query(
+        self, query, prequery="", postquery="", embedding_model="text-embedding-3-large"
+    ):
         """Embeds a query with optional pre and post text."""
         full_query = f"{prequery} {query} {postquery}"
         response = await self.client.embeddings.create(
-            input=full_query, model=self.embedding_model
+            input=full_query, model=embedding_model
         )
         return response.data[0].embedding
 
@@ -184,10 +192,10 @@ class Rag:
         with open(filename, "w", encoding="utf-8") as json_file:
             json.dump(top_chunks_text, json_file, indent=4)
 
-    async def call_gpt4(self, messages):
+    async def call_gpt(self, messages, model="gpt-4-turbo"):
         """Calls the GPT-4 model to generate responses based on the provided messages."""
         response = await self.client.chat.completions.create(
-            model="gpt-4-turbo",
+            model=model,
             messages=messages,
             stream=False,
         )
@@ -195,10 +203,10 @@ class Rag:
         print(colored(assistant_response, "green"))
         return assistant_response
 
-    async def call_gpt4_with_streaming(self, messages):
+    async def call_gpt_with_streaming(self, messages, model="gpt-4-turbo"):
         """Calls the GPT-4 model with streaming enabled to generate responses based on the provided messages."""
         response = await self.client.chat.completions.create(
-            model="gpt-4-turbo",
+            model=model,
             messages=messages,
             stream=True,
         )
@@ -211,10 +219,12 @@ class Rag:
                 )
         return assistant_response
 
-    async def call_gpt4_with_streaming_for_streamlit(self, messages):
+    async def call_gpt_with_streaming_for_streamlit(
+        self, messages, model="gpt-4-turbo"
+    ):
         """Calls the GPT-4 model with streaming enabled to generate responses based on the provided messages."""
         response = await self.client.chat.completions.create(
-            model="gpt-4-turbo",
+            model=model,
             messages=messages,
             stream=True,
         )
@@ -225,7 +235,7 @@ class Rag:
                     colored(chunk.choices[0].delta.content, "green"), end="", flush=True
                 )
 
-    async def call_gpt4_with_json(self, messages):
+    async def call_gpt_with_json(self, messages, model="gpt-4-turbo"):
         """Calls the GPT-4 model to generate JSON formatted responses based on the provided messages."""
         messages.insert(
             0,
@@ -235,7 +245,7 @@ class Rag:
             },
         )
         response = await self.client.chat.completions.create(
-            model="gpt-4-turbo",
+            model=model,
             messages=messages,
             response_format={"type": "json_object"},
             stream=False,

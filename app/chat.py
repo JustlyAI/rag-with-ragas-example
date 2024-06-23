@@ -98,7 +98,7 @@ async def chat_loop():
                         "yellow",
                     )
                 )
-                gpt4_response = await rag.call_gpt4_with_streaming(messages)
+                gpt4_response = await rag.call_gpt_with_streaming(messages)
         elif input_type == "urls":
             try:
                 urls = input(

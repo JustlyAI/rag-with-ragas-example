@@ -1,12 +1,12 @@
-Streamlit Interactions
-    Add Model, Embeddings Model, Chunk size and overlap, K top chunks
-    Add Testset and K top chunks to RAGAS
 
 Clear documents
 Docker-Compose
-Integrate Pydantic
+Inspect ContextRelevancy
 FastAPI
 Test URLs
 Test for multi-document
+Improve progress bar
+Finalize README
 Deploy on Railway
+
 

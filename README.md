@@ -1,12 +1,16 @@
-# Simple RAG with RAGAS Evaluation
+# Basic RAG 📚 with RAGAS Evaluation ✅
 
-#### Build and evaluate your own custom RAG system.
+#### Build and evaluate your own RAG system in (almost) plain python. This is a fully functional and highly modeularized RAG system that can be used as a base for building custom RAG systems.
 
-## Quick Start
+### Prerequisites
 
-To quickly check the functionality, run the following commands:
+- IDE (VSCode, PyCharm, Jupyter Notebook, etc.)
+- Python 3.10 or later
+- Anaconda (recommended)
+- Docker (optional)
+- OpenAI API Key
 
-## Setting Up Environment Variables
+### Setting Up Environment Variables
 
 Before running the application, ensure you have set the `OPENAI_API_KEY` in a `.env` file in the root directory of your project. This key is necessary for accessing OpenAI's API. To obtain key, visit [Overview - OpenAI API](https://platform.openai.com/docs/overview).
 
@@ -24,9 +28,11 @@ Before running the application, ensure you have set the `OPENAI_API_KEY` in a `.
 
 Replace `your_openai_api_key_here` with your actual OpenAI API key.
 
-The current implementation defaults to gpt-4-turbo for the LLM model and OpenAI'stext-embedding-3-large for the embeddings model. The models used are among the most impoortant factors to consider in building and measuring RAG systems.
+The current implementation defaults to gpt-4-turbo for the LLM model and OpenAI's text-embedding-3-large for the embeddings model.
 
-3. **Run these 3 commands to check the application components:**(May not work on all systems, in any case see Docker Instructions)
+## Quick Start
+
+**Run these 3 commands to check the application components:**(May not work on all systems, in any case see Docker Instructions)
 
 ```sh
 python -m app.chat
@@ -34,11 +40,11 @@ python -m app.eval
 streamlit run app/streamlit.py
 ```
 
-A deployed simple RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
+A deployed basic RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
 
-## Docker Instructions
+### Docker Instructions
 
-### Build and Run Docker Image
+#### Build and Run Docker Image
 
 1. **Build the Docker Image Locally:**
 
@@ -63,17 +69,17 @@ A deployed simple RAG with RAGAS Streamlit App can be accessed directly at http:
 3. **Run the Docker Container:**
 
    ```sh
-   \
+   docker run -p 8080:8080 rag-ragas-test
    ```
 
-## Acknowledgements
+### Acknowledgements
 
 This project has been inspired and built upon the work of brilliant and generous individuals, namely:
 
 - [Modular Rag and chat implementation from URLs, PDFs and txt files. | Patreon](https://www.patreon.com/posts/modular-rag-and-106461497)
 - [Coding-Crashkurse/RAG-Evaluation-with-Ragas](https://github.com/Coding-Crashkurse/RAG-Evaluation-with-Ragas)
 
-## Overview
+### Overview
 
 This repository demonstrates a Retrieval-Augmented Generation (RAG) pipeline using the `Rag` class and evaluates its performance using the `Ragas` framework. The main components are:
 
