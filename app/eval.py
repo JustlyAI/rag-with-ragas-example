@@ -23,7 +23,7 @@ class Eval:
     def __init__(self):
         self.rag = Rag()
 
-    async def run_evaluation(self):
+    async def run_evaluation(self, test_size, distributions):
         data_folder_path = "app/data"
         print(colored("Starting to process files in the data folder...", "yellow"))
 
@@ -35,8 +35,12 @@ class Eval:
         generator = TestsetGenerator.with_openai()
         testset = generator.generate_with_langchain_docs(
             documents=all_chunks,
-            test_size=2,
-            distributions={simple: 0.5, reasoning: 0.25, multi_context: 0.25},
+            test_size=test_size,
+            distributions={
+                simple: distributions["simple"],
+                reasoning: distributions["reasoning"],
+                multi_context: distributions["multi_context"],
+            },
         )
         # Convert the testset to a pandas DataFrame and save it to a CSV file
         testset_df = testset.to_pandas()
@@ -63,7 +67,7 @@ class Eval:
             ]
             # Retrieve relevant documents
             top_chunks = self.rag.cosine_similarity_search(
-                query_embedding, embedded_chunks, top_k=3
+                query_embedding, embedded_chunks, top_k=5
             )
             self.rag.save_top_chunks_text_to_file(
                 top_chunks, filename="app/output/top_chunks.json"
@@ -76,7 +80,7 @@ class Eval:
                     "content": f"Here are some documents that may help answer the user query: {top_chunks}. Please provide an answer to the query only based on the documents. If the documents don't contain the answer, say that you don't know.\n\nquery: {query}",
                 },
             ]
-            answer = await self.rag.call_gpt4(messages)
+            answer = await self.rag.call_gpt(messages)
             data["answer"].append(answer)
             data["contexts"].append(top_chunks)
 
@@ -109,7 +113,15 @@ class Eval:
             )
         )
 
+        return result_df
+
 
 if __name__ == "__main__":
     eval = Eval()
-    asyncio.run(eval.run_evaluation())
+    # For testing purposes, you can use default values here
+    asyncio.run(
+        eval.run_evaluation(
+            test_size=2,
+            distributions={"simple": 0.5, "reasoning": 0.25, "multi_context": 0.25},
+        )
+    )
