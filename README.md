@@ -68,7 +68,7 @@ The current implementation defaults to 'gpt-4-turbo' for the LLM model and OpenA
 
 ## Quick Start
 
-**Run these 3 commands to check the application components:**(Follow Docker Instructions if your system is incompatible.)
+**Run these 3 commands to check the application components:**
 
 ```sh
 python -m app.chat
@@ -76,9 +76,9 @@ python -m app.eval
 streamlit run app/streamlit.py
 ```
 
-If everything is set up correctly, you should see the application components running without any errors.
+If everything is set up correctly, you should see the application components running without any errors. Follow Docker Instructions if your system is incompatible.
 
-A deployed basic RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
+Coming soon: A deployed basic RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
 
 ### Docker Instructions
 
