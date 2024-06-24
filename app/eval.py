@@ -23,12 +23,27 @@ class Eval:
     def __init__(self):
         self.rag = Rag()
 
-    async def run_evaluation(self, test_size, distributions):
+    async def run_evaluation(
+        self,
+        llm_model="gpt-4-turbo",
+        token_encoding_model="gpt-4",
+        embedding_model="text-embedding-3-large",
+        chunk_size=800,
+        overlap=400,
+        top_k=3,
+        test_size=4,
+        distributions={"simple": 0.5, "reasoning": 0.25, "multi_context": 0.25},
+    ):
         data_folder_path = "app/data"
         print(colored("Starting to process files in the data folder...", "yellow"))
 
         # Process all text and PDF files in the data folder, transform them into chunks, and store them
-        all_chunks = await self.rag.process_files_in_folder_for_eval(data_folder_path)
+        all_chunks = await self.rag.process_files_in_folder_for_eval(
+            data_folder_path=data_folder_path,
+            token_encoding_model=token_encoding_model,
+            chunk_size=chunk_size,
+            overlap=overlap,
+        )
         print(colored("All chunks have been processed and saved.", "blue"))
 
         print(colored("Starting to generate a test set.", "green"))
@@ -59,7 +74,10 @@ class Eval:
         for query in questions:
             data["question"].append(query)
             # Embed the query
-            query_embedding = await self.rag.embed_query(query)
+            query_embedding = await self.rag.embed_query(
+                query=query,
+                embedding_model=embedding_model,
+            )
             # Extract embeddings from Document objects
             embedded_chunks = [
                 {"text": chunk.page_content, "embedding": chunk.metadata["embedding"]}
@@ -67,7 +85,9 @@ class Eval:
             ]
             # Retrieve relevant documents
             top_chunks = self.rag.cosine_similarity_search(
-                query_embedding, embedded_chunks, top_k=5
+                query_embedding=query_embedding,
+                embedded_chunks=embedded_chunks,
+                top_k=top_k,
             )
             self.rag.save_top_chunks_text_to_file(
                 top_chunks, filename="app/output/top_chunks.json"
@@ -80,7 +100,7 @@ class Eval:
                     "content": f"Here are some documents that may help answer the user query: {top_chunks}. Please provide an answer to the query only based on the documents. If the documents don't contain the answer, say that you don't know.\n\nquery: {query}",
                 },
             ]
-            answer = await self.rag.call_gpt(messages)
+            answer = await self.rag.call_gpt(messages=messages, model=llm_model)
             data["answer"].append(answer)
             data["contexts"].append(top_chunks)
 
@@ -121,7 +141,13 @@ if __name__ == "__main__":
     # For testing purposes, you can use default values here
     asyncio.run(
         eval.run_evaluation(
-            test_size=2,
+            llm_model="gpt-4-turbo",
+            token_encoding_model="gpt-4",
+            embedding_model="text-embedding-3-large",
+            chunk_size=800,
+            overlap=400,
+            top_k=3,
+            test_size=4,
             distributions={"simple": 0.5, "reasoning": 0.25, "multi_context": 0.25},
         )
     )

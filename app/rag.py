@@ -109,7 +109,13 @@ class Rag:
         with open(filename, "w", encoding="utf-8") as json_file:
             json.dump(chunks_dict, json_file, indent=4)
 
-    async def process_files_in_folder_for_eval(self, data_folder_path):
+    async def process_files_in_folder_for_eval(
+        self,
+        data_folder_path,
+        token_encoding_model="gpt-4",
+        chunk_size=800,
+        overlap=400,
+    ):
         """Processes all files in a specified folder for evaluation."""
         if os.path.exists("app/output/chunks.json"):
             with open(
@@ -136,7 +142,12 @@ class Rag:
                     text = self.load_pdf_file(file_path)
                 else:
                     continue
-                chunks = self.process_text(text)
+                chunks = self.process_text(
+                    text=text,
+                    token_encoding_model=token_encoding_model,
+                    chunk_size=chunk_size,
+                    overlap=overlap,
+                )
                 for chunk in chunks:
                     document = Document(
                         page_content=chunk, metadata={"file_name": filename}
@@ -171,7 +182,10 @@ class Rag:
         self, query, prequery="", postquery="", embedding_model="text-embedding-3-large"
     ):
         """Embeds a query with optional pre and post text."""
-        full_query = f"{prequery} {query} {postquery}"
+        if prequery == "" and postquery == "":
+            full_query = query
+        else:
+            full_query = f"{prequery} {query} {postquery}"
         response = await self.client.embeddings.create(
             input=full_query, model=embedding_model
         )
