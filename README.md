@@ -42,11 +42,11 @@ Before running the application, ensure you have set the `OPENAI_API_KEY` in a `.
 
 Replace `your_openai_api_key_here` with your actual OpenAI API key.
 
-The current implementation defaults to 'gpt-4-turbo' for the LLM model and OpenAI's 'text-embedding-3-larg'e' for the embeddings model.
+The current implementation defaults to 'gpt-4-turbo' for the LLM model and OpenAI's 'text-embedding-3-large' for the embeddings model.
 
 ## Quick Start
 
-**Run these 3 commands to check the application components:**(Follow Docker Instructions if your system is incompatible.)
+**Run these 3 commands to check the application components:**
 
 ```sh
 python -m app.chat
@@ -54,7 +54,9 @@ python -m app.eval
 streamlit run app/streamlit.py
 ```
 
-A deployed basic RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
+Not all systems will be compatible. Follow Docker Instructions to avoid (most) compatibility problems.
+
+Coming soon: A deployed basic RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
 
 ### Docker Instructions
 
