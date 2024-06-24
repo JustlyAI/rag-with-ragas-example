@@ -56,6 +56,8 @@ class RagWithRagasApp:
         self.rag = Rag()
         self.eval = Eval()
 
+        st.sidebar.title("Load Data 📤")
+
         # clear output
         self.rag.clear_output_folder()
 
@@ -178,7 +180,7 @@ class RagWithRagasApp:
                         help="Overlap between text chunks",
                     )
                     top_k_input = st.slider(
-                        "Top K Results",
+                        "Top-K",
                         min_value=1,
                         max_value=10,
                         value=st.session_state.get("top_k", 3),
@@ -190,7 +192,7 @@ class RagWithRagasApp:
                 if submit_button:
                     st.success("Configuration updated!")
 
-            st.subheader("Document Q&A")
+            st.subheader("Query, Retrieval & Answer")
 
             query_input = st.text_input(
                 "Enter your query", value=st.session_state.get("query", "")
@@ -249,39 +251,46 @@ class RagWithRagasApp:
                             query=st.session_state.query,
                             embedding_model=embedding_model_input,
                         )
-                        top_chunks = self.rag.cosine_similarity_search(
-                            query_embedding=query_embedding,
-                            embedded_chunks=embedded_chunks,
-                            top_k=top_k_input,
-                        )
 
-                        self.rag.save_top_chunks_text_to_file(
-                            top_chunks, filename="app/output/top_chunks.json"
-                        )
+                        # Check if embedded_chunks is not empty before proceeding
+                        if embedded_chunks:
+                            top_chunks = self.rag.cosine_similarity_search(
+                                query_embedding=query_embedding,
+                                embedded_chunks=embedded_chunks,
+                                top_k=top_k_input,
+                            )
 
-                        st.session_state.top_chunks = top_chunks
+                            self.rag.save_top_chunks_text_to_file(
+                                top_chunks, filename="app/output/top_chunks.json"
+                            )
 
-                        messages = [
-                            {
-                                "role": "system",
-                                "content": "You are a helpful assistant.",
-                            },
-                            {
-                                "role": "user",
-                                "content": f"Here are some documents that may help answer the user query: {top_chunks}. Please provide an answer to the query only based on the documents. If the documents don't contain the answer, say that you don't know.\n\nquery: {st.session_state.query}",
-                            },
-                        ]
+                            st.session_state.top_chunks = top_chunks
 
-                        response_placeholder = st.empty()
-                        assistant_reply = ""
+                            messages = [
+                                {
+                                    "role": "system",
+                                    "content": "You are a helpful assistant.",
+                                },
+                                {
+                                    "role": "user",
+                                    "content": f"Here are some documents that may help answer the user query: {top_chunks}. Please provide an answer to the query only based on the documents. If the documents don't contain the answer, say that you don't know.\n\nquery: {st.session_state.query}",
+                                },
+                            ]
 
-                        async for (
-                            chunk
-                        ) in self.rag.call_gpt_with_streaming_for_streamlit(
-                            messages=messages, model=st.session_state.llm_model
-                        ):
-                            assistant_reply += chunk
-                            response_placeholder.markdown(assistant_reply)
+                            response_placeholder = st.empty()
+                            assistant_reply = ""
+
+                            async for (
+                                chunk
+                            ) in self.rag.call_gpt_with_streaming_for_streamlit(
+                                messages=messages, model=st.session_state.llm_model
+                            ):
+                                assistant_reply += chunk
+                                response_placeholder.markdown(assistant_reply)
+                        else:
+                            st.warning(
+                                "No embedded chunks found. Please make sure you've uploaded documents or provided URLs."
+                            )
 
                 asyncio.run(initialize_chat())
 
@@ -357,7 +366,7 @@ class RagWithRagasApp:
                             help="Overlap between text chunks",
                         )
                         top_k_input = st.slider(
-                            "Top K Results",
+                            "Top-K",
                             min_value=1,
                             max_value=10,
                             value=st.session_state.get("top_k", 3),
@@ -424,7 +433,14 @@ class RagWithRagasApp:
                     # Run the evaluation with the specified parameters
                     asyncio.run(
                         self.eval.run_evaluation(
-                            test_size=test_size, distributions=distributions
+                            llm_model=st.session_state.llm_model,
+                            token_encoding_model=st.session_state.token_encoding_model,
+                            embedding_model=st.session_state.embedding_model,
+                            chunk_size=st.session_state.chunk_size,
+                            overlap=st.session_state.overlap,
+                            top_k=st.session_state.top_k,
+                            test_size=st.session_state.test_size,
+                            distributions=st.session_state.distributions,
                         )
                     )
                     # return result_df
@@ -526,7 +542,7 @@ class RagWithRagasApp:
             st.session_state.top_k = 3
 
         if "test_size" not in st.session_state:
-            st.session_state.test_size = 10
+            st.session_state.test_size = 4
 
         # Distributions amount to 1.0
         if "distributions" not in st.session_state:

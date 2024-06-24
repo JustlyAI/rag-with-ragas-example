@@ -1,5 +1,3 @@
-# Don't trust this yet!--I'm still working on it.
-
 version: "3.10"
 
 services:

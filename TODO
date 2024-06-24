@@ -1,12 +1,6 @@
-
-Clear documents
-Docker-Compose
-Inspect ContextRelevancy
+Clear documents button
 FastAPI
-Test URLs
-Test for multi-document
-Improve progress bar
-Finalize README
+Test multi-document
+Test urls
+Improve progress bar for eval
 Deploy on Railway
-
-
