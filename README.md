@@ -24,6 +24,28 @@ Retrieval Augmented Generation (RAG) is a technique that enhances language model
 - Docker (optional)
 - OpenAI API Key
 
+## Setting up Conda Environment and Installing Requirements
+
+To set up the Conda environment and install the required packages, follow these steps:
+
+1. **Create a new Conda environment:**
+
+   ```sh
+   conda create --name rag_env python=3.10
+   ```
+
+2. **Activate the Conda environment:**
+
+   ```sh
+   conda activate rag_env
+   ```
+
+3. **Install the required packages:**
+
+   ```sh
+   pip install -r requirements.txt
+   ```
+
 ## Setting Up Environment Variables
 
 Before running the application, ensure you have set the `OPENAI_API_KEY` in a `.env` file in the root directory of your project. This key is necessary for accessing OpenAI's API. To obtain key, visit [Overview - OpenAI API](https://platform.openai.com/docs/overview).
@@ -53,6 +75,8 @@ python -m app.chat
 python -m app.eval
 streamlit run app/streamlit.py
 ```
+
+If everything is set up correctly, you should see the application components running without any errors.
 
 A deployed basic RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
 
