@@ -76,7 +76,7 @@ python -m app.eval
 streamlit run app/streamlit.py
 ```
 
-If everything is set up correctly, you should see the application components running without any errors.
+If everything is set up correctly, you should see the application components running without any errors. Follow Docker Instructions if your system is incompatible.
 
 Coming soon: A deployed basic RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
 
