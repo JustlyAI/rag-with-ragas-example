@@ -24,6 +24,20 @@ Retrieval Augmented Generation (RAG) is a technique that enhances language model
 - Docker (optional)
 - OpenAI API Key
 
+## Quick Start
+
+If you meet all of the above requirements, you could launch the RAG with RAGAS Evaluation streamlit app locally by running the following command:
+
+```sh
+   docker compose up --build
+```
+
+Access Local URL: http://localhost:8080
+
+You will be asked to enter your OPENAI_API_KEY to continue.
+
+Coming soon: A deployed basic RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
+
 ## Setting up Conda Environment and Installing Requirements
 
 To set up the Conda environment and install the required packages, follow these steps:
@@ -66,9 +80,7 @@ Replace `your_openai_api_key_here` with your actual OpenAI API key.
 
 The current implementation defaults to 'gpt-4-turbo' for the LLM model and OpenAI's 'text-embedding-3-large' for the embeddings model.
 
-## Quick Start
-
-**Run these 3 commands to check the application components:**
+**3. Run these 3 commands to check the application components:**
 
 ```sh
 python -m app.chat
@@ -77,8 +89,6 @@ streamlit run app/streamlit.py
 ```
 
 If everything is set up correctly, you should see the application components running without any errors. Follow Docker Instructions if your system is incompatible.
-
-Coming soon: A deployed basic RAG with RAGAS Streamlit App can be accessed directly at http:// (bring your own key).
 
 ### Docker Instructions
 
