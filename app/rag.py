@@ -3,12 +3,14 @@ import tiktoken
 import json
 import requests
 import asyncio
-from openai import AsyncOpenAI
-from PyPDF2 import PdfReader
-from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from termcolor import colored
+from PyPDF2 import PdfReader
+from sklearn.metrics.pairwise import cosine_similarity
+
+from openai import AsyncOpenAI
 from langchain.schema import Document
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,8 +18,6 @@ load_dotenv()
 
 class Rag:
     def __init__(self):
-        # self.token_encoding_model = "gpt-4"
-        # self.embedding_model = "text-embedding-3-large"
         self.client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "YOUR_API_KEY"))
 
     async def fetch_text_from_url(self, url):
